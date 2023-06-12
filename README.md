@@ -39,5 +39,7 @@ make port-forward
 and navigate to 127.0.0.1:8080 in your browser to browse the documentation.
 
 
-Note that the Makefile assumes that Docker is running and that the `kind` and `kubectl` commands are available in the PATH.
+Note that the Makefile assumes that Docker is running and that the `kind` and `kubectl` commands are available in the PATH. Also, the Makefile has other useful commands `example-data` if you want to play around and write some sql.
+
+#FIXME: Also, make sure you know what cluster is set as your current context. The makefile does not care if it's kind or k8s10 currently.
 
