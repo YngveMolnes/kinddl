@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: schemaspy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: schemaspy
+  template:
+    metadata:
+      labels:
+        app: schemaspy
+    spec:
+      initContainers:
+      - name: schemaspy
+        image: schemaspy/schemaspy:latest
+        command: ["java", "-jar", "schemaspy-6.1.0.jar", "-t", "pgsql", "-host", "postgres-service.default.svc.cluster.local", "-port", "5432", "-db", "platform_development", "-u", "postgres", "-p", "development", "-s", "public", "-o", "/output"]
+        volumeMounts:
+        - name: output-volume
+          mountPath: /output
+      containers:
+      - name: webserver
+        image: python:3-alpine
+        command: ["python3", "-m", "http.server", "--directory", "/output", "80"]
+        volumeMounts:
+        - name: output-volume
+          mountPath: /output
+        ports:
+        - containerPort: 80
+      volumes:
+      - name: output-volume
+        emptyDir: {}
+
+
