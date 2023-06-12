@@ -15,7 +15,21 @@ spec:
       initContainers:
       - name: schemaspy
         image: schemaspy/schemaspy:latest
-        args: ["-t", "pgsql", "-host", "postgres.default.svc.cluster.local", "-port", "5432", "-db", "platform_development", "-u", "postgres", "-p", "development", "-s", "public"]
+        args:
+          - "-t"
+          - "pgsql"
+          - "-host"
+          - "postgres.default.svc.cluster.local"
+          - "-port"
+          - "5432"
+          - "-db"
+          - "platform_development"
+          - "-u"
+          - "postgres"
+          - "-p"
+          - "development"
+          - "-s"
+          - "public"
         volumeMounts:
         - name: output-volume
           mountPath: /output
