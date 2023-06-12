@@ -27,6 +27,10 @@ run-script:
 	kubectl cp init.sql $(POD_NAME):/init.sql
 	kubectl exec -it $(POD_NAME) -- psql -U postgres -f init.sql -d platform_development
 
+example-data:
+	kubectl cp example_data.sql $(POD_NAME):/example_data.sql
+	kubectl exec -it $(POD_NAME) -- psql -U postgres -f example_data.sql -d platform_development
+
 create-db:
 	kubectl cp user_and_db.sql $(POD_NAME):/user_and_db.sql
 	kubectl exec -it $(POD_NAME) -- psql -U postgres -f user_and_db.sql
