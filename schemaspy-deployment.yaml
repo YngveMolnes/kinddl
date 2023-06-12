@@ -15,21 +15,18 @@ spec:
       initContainers:
       - name: schemaspy
         image: schemaspy/schemaspy:latest
-        command: ["java", "-jar", "schemaspy-6.1.0.jar", "-t", "pgsql", "-host", "postgres-service.default.svc.cluster.local", "-port", "5432", "-db", "platform_development", "-u", "postgres", "-p", "development", "-s", "public", "-o", "/output"]
+        args: ["-t", "pgsql", "-host", "postgres.default.svc.cluster.local", "-port", "5432", "-db", "platform_development", "-u", "postgres", "-p", "development", "-s", "public"]
         volumeMounts:
         - name: output-volume
           mountPath: /output
       containers:
       - name: webserver
-        image: python:3-alpine
-        command: ["python3", "-m", "http.server", "--directory", "/output", "80"]
+        image: nginx:alpine
         volumeMounts:
         - name: output-volume
-          mountPath: /output
+          mountPath: /usr/share/nginx/html
         ports:
         - containerPort: 80
       volumes:
       - name: output-volume
         emptyDir: {}
-
-

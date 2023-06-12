@@ -1,6 +1,8 @@
 .PHONY: create-cluster apply-deployment wait-for-db connect-db run-script setup-all teardown
 
 POD_NAME = $(shell kubectl get pods -l app=postgres -o jsonpath="{.items[0].metadata.name}")
+SCHEMASPY_POD_NAME = $(shell kubectl get pods -l app=schemaspy -o jsonpath="{.items[0].metadata.name}")
+
 
 create-cluster:
 	kind create cluster --config kind-config.yaml
@@ -32,10 +34,10 @@ create-db:
 apply-schemaspy:
 	kubectl apply -f schemaspy-deployment.yaml
 
+port-forward:
+	kubectl port-forward $(SCHEMASPY_POD_NAME) 8080:80
+
 setup-all: create-cluster apply-deployment wait-for-db create-db run-script apply-schemaspy
 
 teardown:
 	kind delete cluster
-
-generate-docs:
-	./generate-docs.sh
